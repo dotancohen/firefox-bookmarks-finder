@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+"""
+Locate in which Firefox Bookmarks directory is a particular URL.
+"""
+
 import argparse
 import sqlite3
 

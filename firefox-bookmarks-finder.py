@@ -19,6 +19,10 @@ def main(url, db):
 	conn = sqlite3.connect(db)
 	conn.row_factory = sqlite3.Row
 
+	if not url[0:4]=='http':
+		print_folders_names_match(conn, url)
+		return True
+
 	ids = get_url_ids(conn, url)
 
 	for moz_fk in ids:

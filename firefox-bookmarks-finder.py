@@ -55,6 +55,23 @@ def get_url_ids(conn, url):
 
 
 
+def print_folders_names_match(conn, needle):
+
+	needle = '%'+needle+'%'
+	sql = "SELECT parent, title FROM moz_bookmarks WHERE title LIKE :needle"
+	paramsDict = {'needle': needle}
+	cursor = conn.execute(sql, paramsDict)
+
+	for row in cursor:
+		print('')
+		print(' Title: %s' % (row['title']), )
+		if row['parent']!=0:
+			print_folder_paths(conn, row['parent'], 'id')
+
+	return True
+
+
+
 def get_ff_places():
 
 	#TODO: Get this automatically!

@@ -10,7 +10,7 @@ import sqlite3
 
 
 
-def main(url, db):
+def main(url, db, record_type=None):
 
 	print()
 	print('URL: ' + url)
@@ -20,7 +20,7 @@ def main(url, db):
 	conn.row_factory = sqlite3.Row
 
 	if not url[0:4]=='http':
-		print_folders_names_match(conn, url)
+		print_folders_names_match(conn, url, record_type)
 		return True
 
 	ids = get_url_ids(conn, url)
@@ -59,10 +59,16 @@ def get_url_ids(conn, url):
 
 
 
-def print_folders_names_match(conn, needle):
+def print_folders_names_match(conn, needle, record_type=None):
 
 	needle = '%'+needle+'%'
 	sql = "SELECT parent, title FROM moz_bookmarks WHERE title LIKE :needle"
+
+	if record_type=='bm':
+		sql += " AND type=1"
+	elif record_type=='dir':
+		sql += " AND type=2"
+
 	paramsDict = {'needle': needle}
 	cursor = conn.execute(sql, paramsDict)
 
@@ -90,6 +96,7 @@ if __name__=='__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('url')
 	parser.add_argument('-db')
+	parser.add_argument('-type')
 	args = parser.parse_args()
 
 	if args.db==None:
@@ -97,7 +104,12 @@ if __name__=='__main__':
 	else:
 		db = args.db
 
-	main(args.url, db)
+	if args.type in ['bm', 'dir']:
+		record_type = args.type
+	else:
+		record_type = None
+
+	main(args.url, db, record_type)
 
 """
 sqlite> .schema moz_bookmarks

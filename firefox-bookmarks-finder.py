@@ -12,10 +12,6 @@ import sqlite3
 
 def main(url, db, record_type=None):
 
-	print()
-	print('URL: ' + url)
-	print(' DB: ' + str(db))
-
 	conn = sqlite3.connect(db)
 	conn.row_factory = sqlite3.Row
 
@@ -40,7 +36,8 @@ def print_folder_paths(conn, moz_fk, search_field='fk'):
 	cursor = conn.execute(sql, paramsDict)
 
 	for row in cursor:
-		print(' Title: %s' % (row['title']), )
+		if row['title']!='':
+			print(' Title: %s' % (row['title']), )
 		if row['parent']!=0:
 			print_folder_paths(conn, row['parent'], 'id')
 

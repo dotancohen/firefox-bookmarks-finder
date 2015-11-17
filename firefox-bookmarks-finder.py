@@ -95,21 +95,21 @@ if __name__=='__main__':
 
 	parser = argparse.ArgumentParser()
 	parser.add_argument('query', help="The query to search for. If a URL is provided then bookmarks to that exact URL will be returned.")
-	parser.add_argument('-db', help="Specify which Firefox database to use.")
-	parser.add_argument('-type', help="Specify 'bm' for bookmarks or 'dir' for directories.")
+	parser.add_argument('-db', '--database', help="Specify which Firefox database to use.")
+	parser.add_argument('-t', '--type', help="Specify 'bm' for bookmarks or 'dir' for directories.", choices=['bm', 'dir'])
 	args = parser.parse_args()
 
-	if args.db==None:
-		db = get_ff_places()
+	if args.database==None:
+		database = get_ff_places()
 	else:
-		db = args.db
+		database = args.database
 
 	if args.type in ['bm', 'dir']:
 		record_type = args.type
 	else:
 		record_type = None
 
-	main(args.query, db, record_type)
+	main(args.query, database, record_type)
 
 """
 sqlite> .schema moz_bookmarks

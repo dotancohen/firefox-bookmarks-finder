@@ -9,10 +9,14 @@ import sqlite3
 
 
 
-
 def main(url, db, record_type=None):
 
-	conn = sqlite3.connect(db)
+	try:
+		conn = sqlite3.connect(db)
+	except sqlite3.OperationalError as e:
+		print("Unable to open database file.")
+		return False
+
 	conn.row_factory = sqlite3.Row
 
 	if not url[0:4]=='http':
